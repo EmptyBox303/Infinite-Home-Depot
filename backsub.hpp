@@ -57,7 +57,7 @@ public:
         if (product.size() == 0) return "1";
         
         for(Quotient& q : product){
-            ret += "(" + q.numerator + "/" + q.denominator + ")";
+            ret += "(" + to_string(q.numerator) + "/" + to_string(q.denominator) + ")";
         }
 
         return ret;
@@ -69,6 +69,7 @@ public:
     pair<int,int> coordinate;
     vector<Product> coefficients;
     bool hasCoord;
+    bool isReciprocal;
 
     Term(bool b) : hasCoord(b){}
 
@@ -87,14 +88,14 @@ public:
             sum += prod.Evaluate();
         }
 
-        return sum;
+        return (isReciprocal) ? 1/sum : sum;
     }
 
     const string print(){
-        string ret;
+        string ret = "";
 
         if (hasCoord){
-            ret += "E(" + coordinate.first + "," + coordinate.second + ")";
+            ret += "E(" + to_string(coordinate.first) + "," + to_string(coordinate.second) + ")";
         }
 
         if (coefficients.size() == 0) return ret;
@@ -102,7 +103,7 @@ public:
         ret += " * (";
         int track = 0;
 
-        for(Prod& p : coefficients){
+        for(Product& p : coefficients){
             if (track > 0){
                 ret += "+ ";
             }
@@ -110,7 +111,8 @@ public:
             track ++;
         }
 
-        ret += ")";
+        ret.push_back(')');
+        if (isReciprocal) ret += "^-1";
         return ret;
     }
 };
@@ -150,15 +152,49 @@ public:
 
         return ret;
     }
+    Equation(vector<Term> lhs, vector<Term> rhs) : lhs(lhs), rhs(rhs){}
 
-    Equation Substitute(Equation& sub, pair<int,int> target){
-        return *this;
+    const vector<pair<int,int>> GetTargets(){
+        vector<pair<int,int>> ret;
+        for(Term& t : lhs){
+            if (t.hasCoord){
+                ret.push_back(t.coordinate);
+            }
+        }
+        for(Term& t : rhs){
+            if (t.hasCoord){
+                ret.push_back(t.coordinate);
+            }
+        }
+        return ret;
+    }
+
+    const Equation Substitute(Equation& sub, pair<int,int> target){
+        
+        vector<Term> left = SubstituteSide(sub,target,true);
+        vector<Term> right = SubstituteSide(sub,target,false);
+        return Equation(left,right);
         //check lhs and rhs
         //there may be a term that matches target
     } 
 
-    vector<Term> SubstituteSide(Equation& sub, pair<int,int> target, bool left){
-        const vector<Term>& searchRange = (left) ? lhs : rhs;
+    const vector<Term> SubstituteSide(Equation& sub, pair<int,int> target, bool left){
+        vector<Term>& searchRange = (left) ? lhs : rhs;
+
+        for (Term& t : searchRange){
+            if (!t.hasCoord || t.coordinate != target) continue;
+
+            vector<Product> coefficients = t.coefficients;
+
+            vector<Term>& subLeft = sub.lhs;
+            vector<Term>& subRight = sub.rhs;
+
+
+            //coefficients * target
+            //target can be substituted by
+            //convention: rhs is a coordinate term always, lhs is complex expression
+
+        }
 
         return searchRange;
     }
