@@ -34,9 +34,15 @@ int main(int argc, char* argv[]){
 
     for(int i = minCoordSum; i <= maxCoordSum; i += 2){
         for (int j = 1; j <= i/2; j++){
-            
+
+            int x = j;
+            int y = i-j;
+
+            cout << std::format("({},{})\n",x,y);
+            //invariant, caluclated probabilities are always x <= y
         }
     }
 
     return 0;
 }
+
