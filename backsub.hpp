@@ -150,4 +150,16 @@ public:
 
         return ret;
     }
+
+    Equation Substitute(Equation& sub, pair<int,int> target){
+        return *this;
+        //check lhs and rhs
+        //there may be a term that matches target
+    } 
+
+    vector<Term> SubstituteSide(Equation& sub, pair<int,int> target, bool left){
+        const vector<Term>& searchRange = (left) ? lhs : rhs;
+
+        return searchRange;
+    }
 };
