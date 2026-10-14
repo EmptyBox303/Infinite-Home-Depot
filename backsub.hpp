@@ -11,6 +11,8 @@ const pair<int,int> JustifyCoords(const int x, const int y);
 
 const vector<pair<int,int>> MakeLateralCoords(const int x, const int y);
 
+const vector<pair<int,int>> MakeDiagonalCoords(const int x, const int y);
+
 class Equation{
 
 };

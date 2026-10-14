@@ -12,6 +12,8 @@ for example: ./backsub 7 runs simulation on coordinates: (1,2) (1,4), (2,3), (1,
 #include <format>
 #include <vector>
 #include <utility>
+#include <format>
+#include <map>
 
 #include "backsub.hpp"
 
@@ -41,11 +43,56 @@ int main(int argc, char* argv[]){
             int x = j;
             int y = i-j;
 
-            auto
+            auto laterals = MakeLateralCoords(x,y);
+            auto diagonals = MakeDiagonalCoords(x,y);
 
-            cout << format("12 / 16 E({},{}) = 1 + ",x,y);
-            for(int i = 0; i < )
+            int switchCount = 12;
+            const pair<int,int> matchPair = {x,y};
+            map<pair<int,int>,int> latMap;
+            map<pair<int,int>,int> diagMap;
+
+            for(int k = 0; k < laterals.size(); k++){
+                if (laterals[k] == matchPair){
+                    switchCount --; continue;
+                }
+                latMap[laterals[k]] ++;
+            }
+            int track = 0;
+
+            cout << "1 + 1 / 16(";
+
+            for(const auto& p : latMap){
+                //if (p.second == 0) continue;
+                cout 
+                << ((track) ? " +" : "") 
+                << ((p.second > 1) ? to_string(p.second) : "")
+                <<"E(" << p.first.first << "," << p.first.second << ")";
+                track++;
+            }
+
             
+
+            for(int k = 0; k < diagonals.size(); k++){
+                if (diagonals[k] == matchPair){
+                    switchCount --; continue;
+                }
+                diagMap[diagonals[k]]++;
+            }
+
+            track = 0;
+            cout << ") + 2 / 16(";
+            for(const auto& p : diagMap){
+                //if (p.second == 0) continue;
+                cout 
+                << ((track) ? " +" : "") 
+                << ((p.second > 1) ? to_string(p.second) : "")
+                <<"E(" << p.first.first << "," << p.first.second << ")";
+                track++;
+            }
+            cout << ") = " << switchCount << " / 16 E(" << x << "," << y << ")\n";
+            //
+
+        
         }
     }
 
