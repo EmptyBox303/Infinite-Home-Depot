@@ -1,9 +1,12 @@
+#pragma once
+
 #include <algorithm>
 #include <string>
 #include <iostream>
 #include <format>
 #include <vector>
 #include <utility>
+
 
 using namespace std;
 
@@ -13,9 +16,7 @@ const vector<pair<int,int>> MakeLateralCoords(const int x, const int y);
 
 const vector<pair<int,int>> MakeDiagonalCoords(const int x, const int y);
 
-class Equation{
 
-};
 
 class Quotient{
 public:
@@ -54,6 +55,7 @@ class Term{
 public:
     pair<int,int> coordinate;
     vector<Product> coefficients;
+    bool hasCoord;
 
     void Add(Product p){
         coefficients.push_back(p);
@@ -71,5 +73,18 @@ public:
         }
 
         return sum;
+    }
+};
+
+class Equation{
+public:
+    vector<Term> lhs;
+    vector<Term> rhs;
+
+    void LeftAddTerm(Term t){
+        lhs.push_back(t);
+    }
+    void RightAddTerm(Term t){
+        rhs.push_back(t);
     }
 };
